@@ -1,46 +1,31 @@
 #!/usr/bin/python3
-"""
-    < 2-C_ROUTE >
-
-    This script starts a Flask web application that listen on 0.0.0.0 port 5000
-    - When query with home '/hbnb' should display "HBNB!"
-    - When query with '/c/<text>' should display "C <text>"
-    - Also, the option strict_slashes=False is used in route definition.
-
+"""Start web application with two routings
 """
 
 from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def hello():
+    """Return string when route queried
     """
-        < Hello >
-    This function returns the string "Hello HBNB!" when '/' is requested.
-    """
-    return "Hello HBNB!"
+    return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
-def hbnb_route():
+@app.route('/hbnb')
+def hbnb():
+    """Return string when route queried
     """
-        < HBNB >
-    This function returns the string "HBNB" when '/hbnb' is requested.
-    """
-    return "HBNB"
+    return 'HBNB'
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def c_route(text):
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
     """
-        < C Route >
-    This function returns the string "C <text>" when '/c/<text>' is requested.
-    """
-    text = text.replace('_', ' ')
-    return 'C {}'.format(text)
+    return 'C ' + text.replace('_', ' ')
 
-
-# Run the flask app on all addresses
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+if __name__ == '__main__':
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)

@@ -1,102 +1,62 @@
 #!/usr/bin/python3
-"""
-    < 6-number_odd_or_even >
-
-    This script starts a Flask web application that listen on 0.0.0.0 port 5000
-    - When query with home '/hbnb' should display "HBNB!"
-    - When query with '/c/<text>' should display "C <text>"
-    - When query with '/python/(<text>)' should display "Python <text>"
-        - default value of text is 'is cool'
-    - When query with '/number/<n>' should display "<n> is a number"
-        - Only if <n> is an integer.
-    - When query with '/number_template/<n>' should display a HTML page
-        - Only if <n> is an integer.
-        - HTML page: h1 tag--> "Number: <n>" inside the tag BODY
-    - When query with '/number_odd_or_even/<n>' should display a HTML page
-        - Only if <n> is an integer.
-        - HTML page: h1 tag--> "Number: <n> is even|odd" inside the tag BODY
-    - Replace underscore _ symbols with a space.
-    - Also, the option strict_slashes=False is used in route definition.
-
+"""Start web application with two routings
 """
 
 from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def hello():
+    """Return string when route queried
     """
-        < Hello >
-    This function returns the string "Hello HBNB!" when '/' is requested.
-    """
-    return "Hello HBNB!"
+    return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
-def hbnb_route():
+@app.route('/hbnb')
+def hbnb():
+    """Return string when route queried
     """
-        < HBNB >
-    This function returns the string "HBNB" when '/hbnb' is requested.
-    """
-    return "HBNB"
+    return 'HBNB'
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def c_route(text):
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
     """
-        < C Route >
-    This function returns the string "C <text>" when '/c/<text>' is requested.
-    """
-    text = text.replace('_', ' ')
-    return 'C {}'.format(text)
+    return 'C ' + text.replace('_', ' ')
 
 
-@app.route('/python', defaults={'text': 'is_cool'}, strict_slashes=False)
-@app.route('/python/<text>', strict_slashes=False)
-def python_route(text):
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_with_text(text='is cool'):
+    """Reformat text based on optional variable
     """
-        < Python Route >
-    This function returns the string "Python <text>" when '/python/<text>'
-        is requested.
-    Default value of text is 'is cool'.
-    """
-    text = text.replace('_', ' ')
-    return 'Python {}'.format(text)
+    return 'Python ' + text.replace('_', ' ')
 
 
-@app.route('/number/<int:n>', strict_slashes=False)
-def num(n):
+@app.route('/number/<int:n>')
+def number(n=None):
+    """Allow request if path variable is a valid integer
     """
-        < Number Route >
-    This function returns the string "<n> is a number" when '/number/<n>'
-        is requested.
-    <n> must be an integer.
-    """
-    return '{} is a number'.format(n)
+    return str(n) + ' is a number'
 
 
-@app.route('/number_template/<int:n>', strict_slashes=False)
+@app.route('/number_template/<int:n>')
 def number_template(n):
+    """Retrieve template for request
     """
-        < Number template >
-    This function display a html page with n in H1 tag inside BODY
-    <n> must be an integer.
-    """
-    return render_template('5-number.html', n=n)
+    path = '5-number.html'
+    return render_template(path, n=n)
 
 
-@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
+@app.route('/number_odd_or_even/<int:n>')
 def number_odd_or_even(n):
+    """Render template based on conditional
     """
-        < Number odd or even >
-    This function display a html page with n in H1 tag inside BODY
-    <n> must be an integer.
-    display odd or even based on value of n
-    """
-    return render_template('6-number_odd_or_even.html', n=n)
+    path = '6-number_odd_or_even.html'
+    return render_template(path, n=n)
 
-
-# Run the flask app on all addresses
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+if __name__ == '__main__':
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)

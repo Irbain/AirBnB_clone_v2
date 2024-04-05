@@ -1,18 +1,22 @@
 #!/usr/bin/python3
-"""This module instantiates an object of class FileStorage and DBStorage
+"""Create a unique storage instance for your application"""
 
--> This “switch” will allow the change of storage type
-    directly by using an environment variable
-"""
+from os import environ
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
-from os import getenv
-
-from models.engine.db_storage import DBStorage
-from models.engine.file_storage import FileStorage
-
-if getenv('HBNB_TYPE_STORAGE') == 'db':
+# check envirn var to determine storage method
+if environ['HBNB_TYPE_STORAGE'] == 'db':
+    from models.engine.db_storage import DBStorage
     storage = DBStorage()
-else:
-    storage = FileStorage()
+    storage.reload()
 
-storage.reload()
+else:  # file storage selected
+    from models.engine.file_storage import FileStorage
+    storage = FileStorage()
+    storage.reload()

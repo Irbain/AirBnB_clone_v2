@@ -1,40 +1,24 @@
 #!/usr/bin/python3
-"""
-
-    < 1-HBNB_ROUTE >
-
-    This script starts a Flask web application that listen on 0.0.0.0 port 5000
-    When query with home '/hbnb' should display "HBNB!"
-    Also, the option strict_slashes=False is used in route definition.
-
+"""Start web application with two routings
 """
 
 from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def hello():
+    """Return string when route queried
     """
-        < Hello >
+    return 'Hello HBNB!'
 
-    This function returns the string "Hello HBNB!" when '/' is requested.
 
+@app.route('/hbnb')
+def hbnb():
+    """Return string when route queried
     """
-    return "Hello HBNB!"
+    return 'HBNB'
 
-
-@app.route('/hbnb', strict_slashes=False)
-def hbnb_route():
-    """
-        < HBNB >
-
-    This function returns the string "HBNB" when '/hbnb' is requested.
-
-    """
-    return "HBNB"
-
-
-# Run the flask app on all addresses
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+if __name__ == '__main__':
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
